@@ -215,7 +215,10 @@ class VCard
             }
 
             $value = base64_encode($value);
-            $mimetype = mime_content_type($url);
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);		
+            $mimetype = finfo_file($finfo, 'data://application/octet-stream;base64,' . $value);		
+            finfo_close($finfo);
+            
 
             if (preg_match('/^image\//', $mimetype) !== 1) {
                 throw new VCardMediaException('Returned data aren\'t an image.');
